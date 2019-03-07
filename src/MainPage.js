@@ -1,18 +1,12 @@
 import React from 'react';
 import Header from './Header';
 import MessageList from './MessageList';
-import MessageViewer from './MessageViewer';
-import { EmailConsumer } from './EmailContext';
 
-const MainPage = () => (
-  <EmailConsumer>
-    {({ currentEmail }) => (
-      <main>
-        <Header />
-        {currentEmail ? <MessageViewer /> : <MessageList />}
-      </main>
-    )}
-  </EmailConsumer>
+const MainPage = ({ currentUser, onLogout }) => (
+  <main>
+    <Header currentUser={currentUser} onLogout={onLogout} />
+    <MessageList currentUser={currentUser} />
+  </main>
 );
 
 export default MainPage;

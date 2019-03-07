@@ -1,6 +1,5 @@
 import React from 'react';
 import { login } from './api';
-import { UserConsumer } from './UserContext';
 
 class LoginPage extends React.Component {
   state = {
@@ -16,13 +15,13 @@ class LoginPage extends React.Component {
     });
   };
 
-  handleSubmit = (e, onLogin) => {
+  handleSubmit = e => {
     e.preventDefault();
     this.setState({ loading: true, error: null });
     login(this.state.username, this.state.password)
       .then(user => {
         this.setState({ loading: false });
-        onLogin(user);
+        this.props.onLogin(user);
       })
       .catch(error => this.setState({ error, loading: false }));
   };
@@ -31,35 +30,31 @@ class LoginPage extends React.Component {
     const { username, password, error, loading } = this.state;
 
     return (
-      <UserConsumer>
-        {({ onLogin }) => (
-          <div className="LoginPage">
-            <form onSubmit={e => this.handleSubmit(e, onLogin)}>
-              <label>
-                Username
-                <input
-                  name="username"
-                  value={username}
-                  onChange={this.handleInputChange}
-                />
-              </label>
-              <label>
-                Password
-                <input
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={this.handleInputChange}
-                />
-              </label>
-              {error && <div className="error">{error.message}</div>}
-              <button type="submit" disabled={loading}>
-                Sign In
-              </button>
-            </form>
-          </div>
-        )}
-      </UserConsumer>
+      <div className="LoginPage">
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Username
+            <input
+              name="username"
+              value={username}
+              onChange={this.handleInputChange}
+            />
+          </label>
+          <label>
+            Password
+            <input
+              name="password"
+              type="password"
+              value={password}
+              onChange={this.handleInputChange}
+            />
+          </label>
+          {error && <div className="error">{error.message}</div>}
+          <button type="submit" disabled={loading}>
+            Sign In
+          </button>
+        </form>
+      </div>
     );
   }
 }
